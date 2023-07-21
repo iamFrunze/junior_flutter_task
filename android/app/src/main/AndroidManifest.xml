@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.andreyp.flutter.junior_test">
-   <application
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
         android:label="junior_test"
         android:icon="@mipmap/ic_launcher">
         <activity

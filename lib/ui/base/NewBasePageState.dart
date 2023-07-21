@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:junior_test/model/RootResponse.dart';
 import 'package:junior_test/resources/api/RootType.dart';
+import 'package:junior_test/tools/CustomNetworkImageLoader.dart';
 import 'package:junior_test/tools/MyColors.dart';
 import 'package:junior_test/tools/MyDimens.dart';
 import 'package:junior_test/tools/Strings.dart';
@@ -31,7 +32,7 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget getBody(BuildContext context) {
-    return Text("base root");
+    return const Text("base root");
   }
 
   @override
@@ -47,30 +48,26 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
   Widget getNetworkAppBar(String appBarImageLink, Widget body, String title,
       {List<Widget> actions, Brightness brightness = Brightness.dark}) {
     Widget networkBackground = Container(
-        color: MyColors.grey_light,
-        child: Card(
-            margin: EdgeInsets.zero,
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15)),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: Tools.getImagePath(appBarImageLink),
-              placeholder: (context, url) =>
-                  Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) =>
-                  Image(image: AssetImage('mall_background.png')),
-              imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-              )),
-            )));
+      color: MyColors.grey_light,
+      child: Card(
+        margin: EdgeInsets.zero,
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15)),
+        ),
+        child: CustomNetworkImageLoader(
+          appBarImageLink,
+          Image.asset(
+            'assets/images/app_background.jpg',
+            fit: BoxFit.cover,
+          ),
+          true,
+        ),
+      ),
+    );
     return FlexAppBar(title, networkBackground, body, isCollapsed(),
         actions: actions, brightness: brightness);
   }
@@ -127,7 +124,7 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
   Widget onSuccess(RootTypes event, RootResponse response);
 
   Widget showProgress() {
-    return Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget onNetworkError(RootTypes event, RootResponse response) {
@@ -153,8 +150,9 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                  Icon(Icons.cloud_off, color: MyColors.blue, size: 100.0),
-                  Text(
+                  const Icon(Icons.cloud_off,
+                      color: MyColors.blue, size: 100.0),
+                  const Text(
                     Strings.connection_error,
                     style: TextStyle(
                         fontSize: 35,
@@ -166,7 +164,7 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
   }
 
   Widget showBlankWidget() {
-    return Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget _showInitWidget() {
@@ -180,7 +178,7 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
     return StaticAppBar(
         Strings.appname,
         Container(
-            child: Center(
+            child: const Center(
           child: CircularProgressIndicator(),
         )));
   }
@@ -193,45 +191,59 @@ abstract class NewBasePageState<T extends StatefulWidget> extends State<T> {
 
   Widget _getRegisterBody() {
     return Center(
-        child: SingleChildScrollView(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _getAccountImage(),
-        SizedBox(height: 50),
-        Text(Strings.log_in_text,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: TextStyle(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _getAccountImage(),
+            const SizedBox(height: 50),
+            const Text(
+              Strings.log_in_text,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: MyDimens.subtitleBig,
-                color: MyColors.black)),
-        SizedBox(height: 50),
-        Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
+                color: MyColors.black,
+              ),
             ),
-            color: MyColors.black_light,
-            child: Container(
-                padding:
-                    EdgeInsets.only(top: 15, bottom: 15, left: 80, right: 80),
-                child: Text(Strings.log_in,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        letterSpacing: 1.2,
-                        fontSize: MyDimens.titleSmall,
-                        color: MyColors.white,
-                        fontWeight: FontWeight.bold))))
-      ],
-    )));
+            const SizedBox(height: 50),
+            Card(
+              semanticContainer: true,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              color: MyColors.black_light,
+              child: Container(
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  bottom: 15,
+                  left: 80,
+                  right: 80,
+                ),
+                child: const Text(
+                  Strings.log_in,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    letterSpacing: 1.2,
+                    fontSize: MyDimens.titleSmall,
+                    color: MyColors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _getAccountImage() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Container(margin: EdgeInsets.all(10), child: Text("account"))
+      Container(margin: const EdgeInsets.all(10), child: const Text("account"))
     ]);
   }
 

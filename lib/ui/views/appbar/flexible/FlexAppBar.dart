@@ -44,7 +44,8 @@ class FlexAppBar extends StatelessWidget {
   ScrollController getScrollController() {
     if (_isCollapsed) {
       return new ScrollController(
-          initialScrollOffset: expandedHeight - collapsedHeight);
+        initialScrollOffset: expandedHeight - collapsedHeight,
+      );
     }
     return null;
   }
@@ -58,11 +59,12 @@ class FlexAppBar extends StatelessWidget {
 
   Widget _getBaseAppBar(BuildContext context) {
     return NestedScrollView(
-        controller: getScrollController(),
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [_getAppBar(context)];
-        },
-        body: _body);
+      controller: getScrollController(),
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [_getAppBar(context)];
+      },
+      body: _body,
+    );
   }
 
   Widget _getBaseAppBarWithTabs(BuildContext context) {

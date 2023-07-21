@@ -12,6 +12,9 @@ import 'package:junior_test/ui/base/NewBasePageState.dart';
 
 class ActionsItemWidget extends StatefulWidget {
   static String TAG = "ActionsItemWidget";
+  final int actionId;
+
+  const ActionsItemWidget({Key key, this.actionId}) : super(key: key);
 
   @override
   _ActionsItemWidgetState createState() => _ActionsItemWidgetState();
@@ -28,9 +31,7 @@ class _ActionsItemWidgetState extends NewBasePageState<ActionsItemWidget> {
   @override
   Widget build(BuildContext context) {
     if (actionId == -1) {
-      final ActionsItemArguments args =
-          ModalRoute.of(context).settings.arguments;
-      actionId = args.actionId;
+      actionId = widget.actionId;
     }
     return BlocProvider<ActionsItemQueryBloc>(
         bloc: bloc, child: getBaseQueryStream(bloc.shopItemContentStream));
